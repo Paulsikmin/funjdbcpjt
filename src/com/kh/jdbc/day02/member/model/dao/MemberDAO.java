@@ -2,6 +2,7 @@ package com.kh.jdbc.day02.member.model.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,6 +32,13 @@ public class MemberDAO {
 				member.setMemberId(rset.getString("MEMBER_ID"));
 				member.setMemberPwd(rset.getString("MEMBER_PWD"));
 				member.setMemberName(rset.getString("MEMBER_NAME"));
+				member.setMemberAge(rset.getInt("MEMBER_AGE"));
+				member.setMemberEmail(rset.getString("MEMBER_EMAIL"));
+				member.setMemberPhone(rset.getString("MEMBER_PHONE"));
+				member.setMemberGender(rset.getString("MEMBER_GENDER"));
+				member.setMemberHobby(rset.getString("MEMBER_HOBBY"));
+				member.setMemberAddress(rset.getString("MEMBER_ADDRESS"));
+				member.setMemberDate(rset.getTimestamp("MEMBER_DATE"));
 				mList.add(member);
 			}
 		} catch (ClassNotFoundException e) {
@@ -42,4 +50,80 @@ public class MemberDAO {
 		}
 		return mList;
 	}
+	/**
+	 * 
+	 * @param member
+	 * @return
+	 */
+	public int insertMember(Member member) {
+		String sql = "INSERT INTO MEMBER_TBL VALUES(?,?,?,?,?,?,?,?,?,DEFAULT)";
+		int result = 0;
+		try {
+			Class.forName(DRIVER_NAME);
+			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, member.getMemberId());
+			pstmt.setString(2, member.getMemberPwd());
+			pstmt.setString(3, member.getMemberName());
+			pstmt.setString(4, member.getMemberGender());
+			pstmt.setInt(5, member.getMemberAge());
+			pstmt.setString(6, member.getMemberEmail());
+			pstmt.setString(7, member.getMemberPhone());
+			pstmt.setString(8, member.getMemberAddress());
+			pstmt.setString(9, member.getMemberHobby());	// 쿼리문 실행준비
+			result = pstmt.executeUpdate();					// 쿼리문 실행, sql필요없음!
+			pstmt.close();
+			conn.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public int deleteMember(String memberId) {
+		String sql = "DELETE FROM MEMBER_TBL WHERE MEMBER_ID = ?";
+		int result = 0;
+		try {
+			Class.forName(DRIVER_NAME);
+			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			PreparedStatement pstmt = conn.prepareStatement(sql); // 여기가 아님
+			pstmt.setString(1, memberId); 				// 쿼리문 실행 준비
+			result = pstmt.executeUpdate();				// 쿼리문 실행
+			pstmt.close();
+			conn.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
