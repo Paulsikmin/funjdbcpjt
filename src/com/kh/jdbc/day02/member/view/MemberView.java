@@ -3,6 +3,7 @@ package com.kh.jdbc.day02.member.view;
 import java.util.List;
 import java.util.Scanner;
 
+import com.kh.jdbc.day01.student.model.vo.Student;
 import com.kh.jdbc.day02.member.model.vo.Member;
 
 public class MemberView {
@@ -33,6 +34,19 @@ public class MemberView {
 			System.out.print(", 취미 : " + mOne.getMemberHobby());
 			System.out.println(", 가입날짜 : " + mOne.getMemberDate());
 		}
+	}
+	
+	public Member inputLoginInfo() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("=== === 로그인 정보 입력 === ===");
+		System.out.print("아이디 : ");
+		String memberId = sc.next();
+		System.out.print("비밀번호 : ");
+		String memberPwd = sc.next();
+		Member member = new Member();
+		member.setMemberId(memberId);
+		member.setMemberPwd(memberPwd);
+		return member;
 	}
 	
 	public String inputMemberId(String category) {

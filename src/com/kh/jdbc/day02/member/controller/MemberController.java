@@ -16,6 +16,17 @@ public class MemberController {
 		return mList;
 	}
 	/**
+	 * 회원 로그인
+	 * @param member
+	 * @return
+	 */
+	public int checkInfo(Member member) {
+		MemberDAO mDao = new MemberDAO();
+		int result = mDao.checkLogin(member);
+		return result;
+	}
+	
+	/**
 	 * 
 	 * @param member
 	 */

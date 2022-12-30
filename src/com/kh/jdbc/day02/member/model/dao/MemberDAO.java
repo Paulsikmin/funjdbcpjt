@@ -50,6 +50,31 @@ public class MemberDAO {
 		}
 		return mList;
 	}
+	
+	public int checkLogin(Member member) {
+		String query = "SELECT COUNT(*) AS M_COUNT FROM MEMBER_TBL WHERE MEMBER_ID = ? AND MEMBER_PWD = ?";
+		int result = 0;
+		try {
+			Class.forName(DRIVER_NAME);
+			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			PreparedStatement pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, member.getMemberId());
+			pstmt.setString(2, member.getMemberPwd());// 쿼리문 실행 준비
+			ResultSet rset = pstmt.executeQuery();    // 쿼리문 실행
+			if(rset.next()) {
+				result = rset.getInt("M_COUNT");
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
 	/**
 	 * 
 	 * @param member

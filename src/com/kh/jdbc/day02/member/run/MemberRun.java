@@ -46,6 +46,17 @@ public class MemberRun {
 					mView.displayError("회원 탈퇴가 완료되지 않았습니다.");
 				}
 				break;
+			case 7 :
+				member = mView.inputLoginInfo();
+				result = mCon.checkInfo(member);
+				if(result > 0) {
+					// 로그인 성공
+					mView.displaySuccess("로그인 성공!");
+				}else {
+					// 로그인 실패
+					mView.displayError("일치하는 정보가 존재하지 않습니다.");
+				}
+				break;
 			default : break;
 			}
 		}
