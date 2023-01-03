@@ -6,42 +6,33 @@ import java.sql.SQLException;
 
 public class JDBCTemplate {
 	
-	private final String DRIVER_NAME = "oracle.jdbc.driver.OracleDriver";
-	private final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
-	private final String USER = "STUDENT";
-	private final String PASSWORD = "STUDENT";
+	private static final String DRIVER_NAME = "oracle.jdbc.driver.OracleDriver";
+	private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
+	private static final String USER = "STUDENT";
+	private static final String PASSWORD = "STUDENT";
 	
-	private static JDBCTemplate instance;
+	private static Connection conn;
 	
 	// The constructor JDBCTemplate() is not visible
-	private JDBCTemplate() {
-		try {
-			Class.forName(DRIVER_NAME); 	// 반드시 해줘야하는 것이기 때문
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
+	private JDBCTemplate() {}
 	
-	public static JDBCTemplate getDriverLoad() {
-		if(instance == null) {
-			instance = new JDBCTemplate();
-		}
-		return instance;
-	}
-
-	public Connection getConnection() {
-		Connection conn = null;
+	public static Connection getConnection() {
 		try {
-			conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			conn.setAutoCommit(false);  	// 오토 커밋 해제!
+			if(conn == null || conn.isClosed()) {
+				Class.forName(DRIVER_NAME); 
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				conn.setAutoCommit(false);  	// 오토 커밋 해제!
+			}
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return conn;
 	}
 	
 	// 커밋
-	public void commit(Connection conn) {
+	public static void commit(Connection conn) {
 		try {
 			if(conn != null && !conn.isClosed())
 				conn.commit();
@@ -50,7 +41,7 @@ public class JDBCTemplate {
 		}
 	}
 	// 롤백
-	public void rollback(Connection conn) {
+	public static void rollback(Connection conn) {
 		try {
 			if(conn != null && !conn.isClosed())
 				conn.rollback();
@@ -59,7 +50,7 @@ public class JDBCTemplate {
 		}
 	}
 	// 연결 해제
-	public void close(Connection conn) {
+	public static void close(Connection conn) {
 		try {
 			if(conn != null && !conn.isClosed())
 				conn.close();
